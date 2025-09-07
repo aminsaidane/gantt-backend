@@ -19,7 +19,7 @@ app.use(express.json());
 // Routes
 app.use('/tasks', require('./routes/tasks'));
 app.use('/assignments', require('./routes/assignments'));
-
+// app.use('/resourses',require('./routes/resource'));
 // Main data fetch
 const Task = require('./models/Task');
 const Dependency = require('./models/Dependency');
@@ -34,12 +34,18 @@ app.get('/data', async (req, res) => {
       Resource.find({}),
       Assignment.find({})
     ]);
- 
+    
     res.json({ data: { tasks, dependencies, resources, assignments } });
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch data' });
   }
 });
+
+app.get('/resources', async (req,res)=>{
+    const resources = await Resource.find(); 
+    console.log(resources)
+    res.status(201).json({data: resources});
+})
 
 // Start server
 app.listen(port, () => console.log(`Serving on port ${port}`));
